@@ -1,0 +1,19 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="200"
+  height="200"
+  viewBox="0 0 24 24"
+  fill="none"
+  style="stroke: #333; stroke-width: 3;"
+>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      .icon {
+        stroke: #fff; /* ダークモードでのストローク色を白に */
+      }
+    }
+  </style>
+  <circle cx="12" cy="12" r="10" class="icon" />
+  <line x1="12" y1="6" x2="12" y2="12" class="icon" />
+  <line x1="12" y1="12" x2="16" y2="12" class="icon" />
+</svg>
