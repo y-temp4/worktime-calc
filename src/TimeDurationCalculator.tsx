@@ -11,7 +11,7 @@ const TimeDurationCalculator: React.FC = () => {
     const savedTimePairs = localStorage.getItem("timePairs");
     return savedTimePairs
       ? JSON.parse(savedTimePairs)
-      : [{ start: "00:00", end: "00:00" }];
+      : [{ start: "", end: "" }];
   });
 
   const [totalDuration, setTotalDuration] = useState<number>(0);
@@ -21,7 +21,7 @@ const TimeDurationCalculator: React.FC = () => {
   }, [timePairs]);
 
   const handleAddTimePair = () => {
-    setTimePairs([...timePairs, { start: "00:00", end: "00:00" }]);
+    setTimePairs([...timePairs, { start: "", end: "" }]);
   };
 
   const handleTimeChange = (
@@ -51,7 +51,7 @@ const TimeDurationCalculator: React.FC = () => {
   };
 
   const handleReset = () => {
-    setTimePairs([{ start: "00:00", end: "00:00" }]);
+    setTimePairs([{ start: "", end: "" }]);
   };
 
   useEffect(() => {
@@ -61,6 +61,15 @@ const TimeDurationCalculator: React.FC = () => {
       timePairs.forEach(({ start, end }) => {
         const [startHours, startMinutes] = start.split(":").map(Number);
         const [endHours, endMinutes] = end.split(":").map(Number);
+
+        if (
+          startHours === undefined ||
+          startMinutes === undefined ||
+          endHours === undefined ||
+          endMinutes === undefined
+        ) {
+          return;
+        }
 
         let durationMinutes =
           endHours * 60 + endMinutes - (startHours * 60 + startMinutes);
