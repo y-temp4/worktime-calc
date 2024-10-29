@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import TimeInput from "./TimeInput"; // TimeInputのパスを適宜変更してください
+import TimeInput from "./TimeInput";
 
 interface TimePair {
   start: string;
@@ -74,7 +74,7 @@ const TimeDurationCalculator: React.FC = () => {
         let durationMinutes =
           endHours * 60 + endMinutes - (startHours * 60 + startMinutes);
         if (durationMinutes < 0) {
-          durationMinutes += 24 * 60; // 日をまたぐ場合
+          durationMinutes += 24 * 60;
         }
         totalMinutes += durationMinutes;
       });
@@ -88,8 +88,10 @@ const TimeDurationCalculator: React.FC = () => {
   }, [timePairs]);
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-100 rounded-lg shadow">
-      <h2 className="text-xl font-bold mb-4">Time Duration Calculator</h2>
+    <div className="flex flex-col items-center py-10 px-4 bg-gray-100 dark:bg-gray-800 shadow dark:shadow-gray-700 transition-colors duration-200 min-h-screen">
+      <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">
+        Time Duration Calculator
+      </h2>
       {timePairs.map((pair, index) => (
         <div key={index} className="flex space-x-4 mb-4 items-center">
           <TimeInput
@@ -99,7 +101,7 @@ const TimeDurationCalculator: React.FC = () => {
           />
           <button
             onClick={() => setCurrentTime(index, "start")}
-            className="p-2 bg-green-500 text-white rounded"
+            className="p-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded transition-colors duration-200"
           >
             Set Now
           </button>
@@ -110,13 +112,13 @@ const TimeDurationCalculator: React.FC = () => {
           />
           <button
             onClick={() => setCurrentTime(index, "end")}
-            className="p-2 bg-green-500 text-white rounded"
+            className="p-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded transition-colors duration-200"
           >
             Set Now
           </button>
           <button
             onClick={() => handleDeleteTimePair(index)}
-            className="p-2 bg-red-500 text-white rounded"
+            className="p-2 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded transition-colors duration-200"
           >
             Delete
           </button>
@@ -124,20 +126,22 @@ const TimeDurationCalculator: React.FC = () => {
       ))}
       <button
         onClick={handleAddTimePair}
-        className="mb-4 p-2 bg-blue-500 text-white rounded"
+        className="mb-4 p-2 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded transition-colors duration-200"
       >
         Add Time Pair
       </button>
       <button
         onClick={handleReset}
-        className="mb-4 p-2 bg-yellow-500 text-white rounded"
+        className="mb-4 p-2 bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white rounded transition-colors duration-200"
       >
         Reset All
       </button>
       <div className="mt-4">
-        <p className="text-lg font-semibold">
+        <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
           Total Duration:{" "}
-          <span className="text-blue-600">{totalDuration.toFixed(3)}</span>{" "}
+          <span className="text-blue-600 dark:text-blue-400">
+            {totalDuration.toFixed(3)}
+          </span>{" "}
           hours
         </p>
       </div>

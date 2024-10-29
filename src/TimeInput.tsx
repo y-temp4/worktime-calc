@@ -39,7 +39,10 @@ const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, label }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <label htmlFor={`${label}Input`} className="mb-2">
+      <label
+        htmlFor={`${label}Input`}
+        className="mb-2 text-gray-700 dark:text-gray-300 font-medium transition-colors duration-200"
+      >
         {label}
       </label>
       <input
@@ -49,7 +52,14 @@ const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, label }) => {
         value={value}
         onChange={handleTimeChange}
         onKeyDown={handleKeyDown}
-        className="border border-gray-300 rounded px-2 py-1 text-center w-20"
+        className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-center w-20 
+          bg-white dark:bg-gray-700 
+          text-gray-800 dark:text-gray-100 
+          placeholder-gray-400 dark:placeholder-gray-500
+          focus:border-blue-500 dark:focus:border-blue-400 
+          focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400
+          focus:outline-none
+          transition-colors duration-200"
         placeholder="HH:MM"
         maxLength={5}
       />
