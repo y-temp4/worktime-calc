@@ -23,6 +23,7 @@ concurrency:
 jobs:
   # デプロイするだけなので、単一のデプロイジョブ
   deploy:
+    timeout-minutes: 5
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
