@@ -4,9 +4,19 @@ interface TimeInputProps {
   value: string;
   onChange: (value: string) => void;
   label: string;
+  copyText: string;
+  copiedText: string;
+  copyFailedText: string;
 }
 
-const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, label }) => {
+const TimeInput: React.FC<TimeInputProps> = ({
+  value,
+  onChange,
+  label,
+  copyText,
+  copiedText,
+  copyFailedText,
+}) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [copyStatus, setCopyStatus] = useState<string>("");
 
@@ -41,23 +51,23 @@ const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, label }) => {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(value);
-      setCopyStatus("コピーしました");
+      setCopyStatus(copiedText);
       setTimeout(() => setCopyStatus(""), 2000);
     } catch (err) {
-      setCopyStatus("コピーに失敗しました");
+      setCopyStatus(copyFailedText);
       setTimeout(() => setCopyStatus(""), 2000);
     }
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="w-full">
       <label
         htmlFor={`${label}Input`}
-        className="mb-2 text-gray-700 dark:text-gray-300 font-medium transition-colors duration-200"
+        className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1"
       >
         {label}
       </label>
-      <div className="flex flex-col items-center gap-2">
+      <div className="relative">
         <input
           id={`${label}Input`}
           ref={inputRef}
@@ -65,31 +75,34 @@ const TimeInput: React.FC<TimeInputProps> = ({ value, onChange, label }) => {
           value={value}
           onChange={handleTimeChange}
           onKeyDown={handleKeyDown}
-          className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-center w-20
-            bg-white dark:bg-gray-700
+          className="w-full px-3 py-2 text-sm font-mono text-center
+            bg-gray-50 dark:bg-gray-700
+            border border-gray-200 dark:border-gray-600
+            rounded-md
             text-gray-800 dark:text-gray-100
             placeholder-gray-400 dark:placeholder-gray-500
             focus:border-blue-500 dark:focus:border-blue-400 
-            focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400
+            focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-800
             focus:outline-none
-            transition-colors duration-200"
+            transition-all duration-200
+            hover:border-gray-300 dark:hover:border-gray-500"
           placeholder="HH:MM"
           maxLength={5}
         />
-        <div className="relative">
-          <button
-            onClick={handleCopy}
-            className="text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500
-              text-gray-700 dark:text-gray-200 rounded px-2 py-1 transition-colors duration-200"
-          >
-            コピー
-          </button>
-          {copyStatus && (
-            <div className="fixed mt-1 text-xs bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md px-2 py-1 shadow-sm text-green-600 dark:text-green-400 whitespace-nowrap">
-              {copyStatus}
-            </div>
-          )}
-        </div>
+        <button
+          onClick={handleCopy}
+          className="absolute right-1 top-1 text-xs px-2 py-1 bg-blue-100 hover:bg-blue-200 dark:bg-blue-800 dark:hover:bg-blue-700
+            text-blue-600 dark:text-blue-300 rounded transition-colors duration-200"
+        >
+          {copyText}
+        </button>
+      </div>
+      <div className="h-4 flex items-center justify-center mt-1">
+        {copyStatus && (
+          <div className="text-xs text-green-600 dark:text-green-400">
+            {copyStatus}
+          </div>
+        )}
       </div>
     </div>
   );
