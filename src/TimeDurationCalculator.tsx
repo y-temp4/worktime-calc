@@ -102,7 +102,7 @@ const TimeDurationCalculator: React.FC = () => {
   }, [timePairs]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 py-8 px-4 transition-colors duration-300">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 py-8 px-4 transition-colors duration-300">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-10">
           <div className="flex justify-end mb-4">
@@ -126,7 +126,7 @@ const TimeDurationCalculator: React.FC = () => {
               className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 py-4 pl-4 pr-2 border border-gray-200 dark:border-gray-700"
             >
               <div className="flex items-center gap-4">
-                <div className="w-6 h-6 bg-blue-500 dark:bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
+                <div className="w-6 h-6 bg-blue-500 dark:bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold shrink-0">
                   {index + 1}
                 </div>
 
@@ -178,7 +178,7 @@ const TimeDurationCalculator: React.FC = () => {
                   {timePairs.length > 1 && (
                     <button
                       onClick={() => handleDeleteTimePair(index)}
-                      className="tooltip text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded flex-shrink-0"
+                      className="tooltip text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded shrink-0"
                       data-tooltip={t.delete}
                     >
                       🗑️
