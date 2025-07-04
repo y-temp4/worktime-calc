@@ -108,7 +108,7 @@ const TimeDurationCalculator: React.FC = () => {
           <div className="flex justify-end mb-4">
             <button
               onClick={toggleLanguage}
-              className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md text-sm transition-colors duration-200"
+              className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md text-sm transition-colors duration-200 cursor-pointer"
             >
               {language === "ja" ? "🇺🇸 EN" : "🇯🇵 日本語"}
             </button>
@@ -146,7 +146,7 @@ const TimeDurationCalculator: React.FC = () => {
                     </div>
                     <button
                       onClick={() => setCurrentTime(index, "start")}
-                      className="px-2 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded text-xs font-medium transition-colors duration-200 mb-5"
+                      className="px-2 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded text-xs font-medium transition-colors duration-200 mb-5 cursor-pointer"
                     >
                       {t.setCurrentStart}
                     </button>
@@ -167,7 +167,7 @@ const TimeDurationCalculator: React.FC = () => {
                     </div>
                     <button
                       onClick={() => setCurrentTime(index, "end")}
-                      className="px-2 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded text-xs font-medium transition-colors duration-200 mb-5"
+                      className="px-2 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded text-xs font-medium transition-colors duration-200 mb-5 cursor-pointer"
                     >
                       {t.setCurrentEnd}
                     </button>
@@ -178,7 +178,7 @@ const TimeDurationCalculator: React.FC = () => {
                   {timePairs.length > 1 && (
                     <button
                       onClick={() => handleDeleteTimePair(index)}
-                      className="tooltip text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded shrink-0"
+                      className="tooltip text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded shrink-0 cursor-pointer"
                       data-tooltip={t.delete}
                     >
                       🗑️
@@ -193,14 +193,14 @@ const TimeDurationCalculator: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
           <button
             onClick={handleAddTimePair}
-            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer"
           >
             <span>➕</span>
             <span>{t.addTimePair}</span>
           </button>
           <button
             onClick={handleReset}
-            className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-md hover:shadow-lg flex items-center justify-center space-x-2"
+            className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer"
           >
             <span>🔄</span>
             <span>{t.resetAll}</span>

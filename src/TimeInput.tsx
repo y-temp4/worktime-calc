@@ -92,7 +92,7 @@ const TimeInput: React.FC<TimeInputProps> = ({
         <button
           onClick={handleCopy}
           className="absolute right-1 top-1 text-xs px-2 py-1 bg-blue-100 hover:bg-blue-200 dark:bg-blue-800 dark:hover:bg-blue-700
-            text-blue-600 dark:text-blue-300 rounded transition-colors duration-200"
+            text-blue-600 dark:text-blue-300 rounded transition-colors duration-200 cursor-pointer"
         >
           {copyText}
         </button>
