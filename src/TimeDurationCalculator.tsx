@@ -17,6 +17,9 @@ const TimeDurationCalculator: React.FC = () => {
 
   const [totalDuration, setTotalDuration] = useState<number>(0);
   const [totalCopyStatus, setTotalCopyStatus] = useState<string>("");
+  const [lastRecordedDate, setLastRecordedDate] = useState<string | null>(() => {
+    return localStorage.getItem("lastRecordedDate");
+  });
   const { language, t, toggleLanguage } = useLanguage();
 
   useEffect(() => {
@@ -43,6 +46,15 @@ const TimeDurationCalculator: React.FC = () => {
     const minutes = now.getMinutes().toString().padStart(2, "0");
     const newTime = `${hours}:${minutes}`;
 
+    // Format date as YYYY-MM-DD
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const day = now.getDate().toString().padStart(2, "0");
+    const dateString = `${year}-${month}-${day}`;
+
+    setLastRecordedDate(dateString);
+    localStorage.setItem("lastRecordedDate", dateString);
+
     const newTimePairs = [...timePairs];
     newTimePairs[index][type] = newTime;
     setTimePairs(newTimePairs);
@@ -55,6 +67,8 @@ const TimeDurationCalculator: React.FC = () => {
 
   const handleReset = () => {
     setTimePairs([{ start: "", end: "" }]);
+    setLastRecordedDate(null);
+    localStorage.removeItem("lastRecordedDate");
   };
 
   const handleTotalCopy = async () => {
@@ -118,6 +132,14 @@ const TimeDurationCalculator: React.FC = () => {
           </h1>
           <p className="text-gray-600 dark:text-gray-300">{t.subtitle}</p>
         </div>
+
+        {lastRecordedDate && (
+          <div className="text-center mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {t.lastRecorded}: {lastRecordedDate}
+            </p>
+          </div>
+        )}
 
         <div className="space-y-3">
           {timePairs.map((pair, index) => (

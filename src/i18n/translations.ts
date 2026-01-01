@@ -16,6 +16,7 @@ export const translations = {
     copied: "コピーしました",
     copyFailed: "コピーに失敗しました",
     delete: "削除する",
+    lastRecorded: "最後に記録した日付",
     meta: {
       description:
         "シンプルで使いやすい作業時間計算機。開始時刻と終了時刻を入力するだけで、複数の時間帯の合計作業時間を自動計算します。時間管理や勤怠管理に最適なWebツールです。",
@@ -41,6 +42,7 @@ export const translations = {
     copied: "Copied",
     copyFailed: "Copy failed",
     delete: "Delete",
+    lastRecorded: "Last recorded date",
     meta: {
       description:
         "Simple and easy-to-use work time duration calculator. Just enter start and end times to automatically calculate total working hours across multiple time periods. Perfect for time management and attendance tracking.",
