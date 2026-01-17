@@ -8,7 +8,6 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![React Router](https://img.shields.io/badge/React%20Router-7.12.0-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.28.0-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 
 多言語対応（日本語/英語）の労働時間計算Webアプリケーションです。
@@ -28,7 +27,7 @@
 - **フロントエンド**: React 19 + TypeScript
 - **ビルドツール**: Vite
 - **スタイリング**: Tailwind CSS
-- **ルーティング**: React Router DOM
+- **ルーティング**: History API の軽量ルーティング
 - **パッケージマネージャー**: pnpm
 
 ## 始め方
@@ -64,6 +63,6 @@ pnpm preview
 - 型安全性のためのReact + TypeScript
 - 高速な開発とビルドのためのVite
 - ユーティリティファーストなスタイリングのためのTailwind CSS
-- クライアントサイドルーティングのためのReact Router
+- 言語切替のための軽量 History API ルーティング
 
 このアプリケーションのコードの大部分は生成AIによって生成されました。
