@@ -4,26 +4,28 @@
 
 ![OGP](./public/ogp_en.png)
 
-[![React](https://img.shields.io/badge/React-19.1.0-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.10-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![React Router](https://img.shields.io/badge/React%20Router-7.6.2-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
-[![pnpm](https://img.shields.io/badge/pnpm-10.12.1-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![React Router](https://img.shields.io/badge/React%20Router-7.12.0-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+[![pnpm](https://img.shields.io/badge/pnpm-10.28.0-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 
 This is a web application to calculate work time with multilingual support (English/Japanese).
 
 ## Features
 
 - ⏰ Time duration calculation
+- ➕ Multiple time pairs with automatic total (supports overnight ranges)
+- 🕒 One-click set current time for start/end
+- 📋 Copy total hours or individual times (with picker)
+- ⌨️ Keyboard shortcuts with help modal
+- 🔁 Undo/redo + local persistence
 - 🌍 Multilingual support (English/Japanese)
-- 📱 Responsive design
-- 📋 Copy functionality for calculated results
-- 🎨 Modern UI with Tailwind CSS
 
 ## Tech Stack
 
-- **Frontend**: React 18 with TypeScript
+- **Frontend**: React 19 with TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
 - **Routing**: React Router DOM
@@ -33,7 +35,6 @@ This is a web application to calculate work time with multilingual support (Engl
 
 ### Prerequisites
 
-- Node.js (recommended version 18+)
 - pnpm
 
 ### Installation
@@ -59,6 +60,7 @@ pnpm preview
 ## Development
 
 This project uses:
+
 - React with TypeScript for type safety
 - Vite for fast development and building
 - Tailwind CSS for utility-first styling
