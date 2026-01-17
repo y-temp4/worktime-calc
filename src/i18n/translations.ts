@@ -26,6 +26,23 @@ export const translations = {
       ogDescription:
         "開始時刻と終了時刻を入力するだけで作業時間を自動計算。複数の時間帯にも対応した便利なWebツールです。",
     },
+    shortcuts: {
+      modalTitle: "キーボードショートカット",
+      close: "閉じる",
+      setCurrentTime: "現在時刻を空欄に入力",
+      showHelp: "このヘルプを表示",
+      undo: "元に戻す",
+      redo: "やり直し",
+      resetAll: "すべてリセット",
+      closeModal: "モーダルを閉じる",
+      copyTime: "時刻をコピー",
+      deleteLatest: "最新の時刻を削除",
+      focusLatest: "最新の入力にフォーカス",
+    },
+    copyModal: {
+      title: "コピーする時刻を選択",
+      cancel: "キャンセル",
+    },
   },
   en: {
     title: "⏰ Time Duration Calculator",
@@ -51,6 +68,23 @@ export const translations = {
       ogTitle: "Time Duration Calculator - Simple Work Time Calculation Tool",
       ogDescription:
         "Calculate your work time duration by simply entering start and end times. Supports multiple time periods for comprehensive time tracking.",
+    },
+    shortcuts: {
+      modalTitle: "Keyboard Shortcuts",
+      close: "Close",
+      setCurrentTime: "Set current time to empty field",
+      showHelp: "Show this help",
+      undo: "Undo",
+      redo: "Redo",
+      resetAll: "Reset all",
+      closeModal: "Close modal",
+      copyTime: "Copy time",
+      deleteLatest: "Delete latest time",
+      focusLatest: "Focus latest input",
+    },
+    copyModal: {
+      title: "Select time to copy",
+      cancel: "Cancel",
     },
   },
 } as const;
