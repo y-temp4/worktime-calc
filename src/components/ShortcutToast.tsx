@@ -1,13 +1,13 @@
-interface ShortcutToastProps {
+type ShortcutToastProps = {
   activeKeys: { id: number; key: string; label: string }[];
-}
+};
 
-export const ShortcutToast: React.FC<ShortcutToastProps> = ({ activeKeys }) => {
+export const ShortcutToast = ({ activeKeys }: ShortcutToastProps) => {
   if (activeKeys.length === 0) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 items-end">
-      {activeKeys.map(item => (
+      {activeKeys.map((item) => (
         <div
           key={item.id}
           className="bg-gray-900/90 dark:bg-white/90

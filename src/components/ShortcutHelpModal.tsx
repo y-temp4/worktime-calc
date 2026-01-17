@@ -1,25 +1,25 @@
 import { useEffect, useRef } from "react";
 
-interface ShortcutItem {
+type ShortcutItem = {
   key: string;
   description: string;
-}
+};
 
-interface ShortcutHelpModalProps {
+type ShortcutHelpModalProps = {
   isOpen: boolean;
   onClose: () => void;
   shortcuts: ShortcutItem[];
   title: string;
   closeText: string;
-}
+};
 
-export const ShortcutHelpModal: React.FC<ShortcutHelpModalProps> = ({
+export const ShortcutHelpModal = ({
   isOpen,
   onClose,
   shortcuts,
   title,
   closeText,
-}) => {
+}: ShortcutHelpModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

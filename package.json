@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/generate-ssg.js",
+    "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@types/react": "19.2.8",
     "@types/react-dom": "19.2.3",
+    "@types/node": "24.3.1",
     "@tailwindcss/vite": "4.1.18",
     "@vitejs/plugin-react-swc": "4.2.2",
     "tailwindcss": "4.1.18",

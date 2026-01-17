@@ -1,7 +1,7 @@
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import TimeDurationCalculator from "./TimeDurationCalculator.tsx";
+import { TimeDurationCalculator } from "./components/TimeDurationCalculator.tsx";
 import { navigate, usePathname } from "./router";
 
 const normalizePath = (pathname: string) => {

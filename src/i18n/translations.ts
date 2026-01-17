@@ -88,3 +88,5 @@ export const translations = {
     },
   },
 } as const;
+
+export type Translation = (typeof translations)[Language];

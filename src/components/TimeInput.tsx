@@ -1,6 +1,6 @@
-import React, { forwardRef, useState } from "react";
+import { forwardRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
 
-interface TimeInputProps {
+type TimeInputProps = {
   value: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
@@ -10,9 +10,9 @@ interface TimeInputProps {
   copiedText: string;
   copyFailedText: string;
   externalCopyStatus?: string;
-}
+};
 
-const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
+export const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
   (
     { value, onChange, onBlur, onArrowKeyChange, label, copyText, copiedText, copyFailedText, externalCopyStatus },
     ref
@@ -20,11 +20,11 @@ const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
     const [copyStatus, setCopyStatus] = useState<string>("");
     const displayCopyStatus = externalCopyStatus || copyStatus;
 
-    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault();
 
@@ -127,5 +127,3 @@ const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(
 );
 
 TimeInput.displayName = "TimeInput";
-
-export default TimeInput;

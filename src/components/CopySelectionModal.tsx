@@ -1,28 +1,28 @@
 import { useEffect, useRef } from "react";
 
-export interface TimeOption {
+export type TimeOption = {
   label: string;
   value: string;
   index: number;
-}
+};
 
-interface CopySelectionModalProps {
+type CopySelectionModalProps = {
   isOpen: boolean;
   onClose: () => void;
   options: TimeOption[];
   onSelect: (index: number) => void;
   title: string;
   cancelText: string;
-}
+};
 
-export const CopySelectionModal: React.FC<CopySelectionModalProps> = ({
+export const CopySelectionModal = ({
   isOpen,
   onClose,
   options,
   onSelect,
   title,
   cancelText,
-}) => {
+}: CopySelectionModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

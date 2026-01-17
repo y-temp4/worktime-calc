@@ -1,22 +1,25 @@
-import React, { useState, useEffect, useRef, createRef } from "react";
-import TimeInput from "./TimeInput";
-import { useLanguage } from "./hooks/useLanguage";
-import { useUndoRedo } from "./hooks/useUndoRedo";
-import { useClipboard } from "./hooks/useClipboard";
-import { useKeyboardShortcuts, ShortcutDefinition } from "./hooks/useKeyboardShortcuts";
-import { ShortcutToast } from "./components/ShortcutToast";
-import { ShortcutHelpModal } from "./components/ShortcutHelpModal";
-import { CopySelectionModal, TimeOption } from "./components/CopySelectionModal";
-
-interface TimePair {
-  start: string;
-  end: string;
-}
+import { useState, useEffect, useRef, createRef, type RefObject } from "react";
+import { useLanguage } from "../hooks/useLanguage";
+import { useUndoRedo } from "../hooks/useUndoRedo";
+import { useClipboard } from "../hooks/useClipboard";
+import {
+  useKeyboardShortcuts,
+  ShortcutDefinition,
+} from "../hooks/useKeyboardShortcuts";
+import { ShortcutToast } from "./ShortcutToast";
+import { ShortcutHelpModal } from "./ShortcutHelpModal";
+import { CopySelectionModal, TimeOption } from "./CopySelectionModal";
+import { TopControls } from "./TopControls";
+import { TimePairRow } from "./TimePairRow";
+import { TotalDurationCard } from "./TotalDurationCard";
+import { AppFooter } from "./AppFooter";
+import type { CopiedField, TimePair } from "../types/time";
+import { calculateTotalDuration, getCurrentTimeInfo } from "../utils/timeUtils";
 
 const isMac = () =>
   typeof navigator !== "undefined" && navigator.platform.includes("Mac");
 
-const TimeDurationCalculator: React.FC = () => {
+export const TimeDurationCalculator = () => {
   const getInitialTimePairs = (): TimePair[] => {
     const saved = localStorage.getItem("timePairs");
     if (saved) {
@@ -43,13 +46,13 @@ const TimeDurationCalculator: React.FC = () => {
 
   const [totalDuration, setTotalDuration] = useState<number>(0);
   const [totalCopyStatus, setTotalCopyStatus] = useState<string>("");
-  const [lastRecordedDate, setLastRecordedDate] = useState<string | null>(
-    () => localStorage.getItem("lastRecordedDate")
+  const [lastRecordedDate, setLastRecordedDate] = useState<string | null>(() =>
+    localStorage.getItem("lastRecordedDate"),
   );
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
   const [copyOptions, setCopyOptions] = useState<TimeOption[]>([]);
-  const [copiedField, setCopiedField] = useState<{ pairIndex: number; type: "start" | "end" } | null>(null);
+  const [copiedField, setCopiedField] = useState<CopiedField>(null);
   const { language, t, toggleLanguage } = useLanguage();
   const { copy } = useClipboard();
 
@@ -60,18 +63,21 @@ const TimeDurationCalculator: React.FC = () => {
   }, [timePairs]);
 
   // 各TimeInputのrefを管理
-  const inputRefsRef = useRef<{
-    start: React.RefObject<HTMLInputElement | null>;
-    end: React.RefObject<HTMLInputElement | null>;
-  }[]>([]);
+  const inputRefsRef = useRef<
+    {
+      start: RefObject<HTMLInputElement | null>;
+      end: RefObject<HTMLInputElement | null>;
+    }[]
+  >([]);
 
   // timePairsの数に合わせてrefsを更新
   useEffect(() => {
-    inputRefsRef.current = timePairs.map((_, i) =>
-      inputRefsRef.current[i] || {
-        start: createRef<HTMLInputElement>(),
-        end: createRef<HTMLInputElement>(),
-      }
+    inputRefsRef.current = timePairs.map(
+      (_, i) =>
+        inputRefsRef.current[i] || {
+          start: createRef<HTMLInputElement>(),
+          end: createRef<HTMLInputElement>(),
+        },
     );
   }, [timePairs.length]);
 
@@ -80,36 +86,10 @@ const TimeDurationCalculator: React.FC = () => {
     localStorage.setItem("timePairs", JSON.stringify(timePairs));
   }, [timePairs]);
 
-  // 時刻バリデーション
-  const isValidTime = (time: string): boolean => {
-    if (!time || !time.includes(":")) return false;
-    const [h, m] = time.split(":").map(Number);
-    return !isNaN(h) && !isNaN(m) && h >= 0 && h < 24 && m >= 0 && m < 60;
-  };
-
   // 合計時間計算
   useEffect(() => {
-    let totalMinutes = 0;
-    timePairs.forEach(({ start, end }) => {
-      if (!isValidTime(start) || !isValidTime(end)) return;
-      const [sh, sm] = start.split(":").map(Number);
-      const [eh, em] = end.split(":").map(Number);
-      let duration = eh * 60 + em - (sh * 60 + sm);
-      if (duration < 0) duration += 24 * 60;
-      totalMinutes += duration;
-    });
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    setTotalDuration(parseFloat((hours + minutes / 60).toFixed(3)));
+    setTotalDuration(calculateTotalDuration(timePairs));
   }, [timePairs]);
-
-  // 現在時刻を取得するヘルパー
-  const getCurrentTimeInfo = () => {
-    const now = new Date();
-    const time = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    const date = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
-    return { time, date };
-  };
 
   // 最終記録日付を更新するヘルパー
   const updateLastRecordedDate = (date: string | null) => {
@@ -122,10 +102,14 @@ const TimeDurationCalculator: React.FC = () => {
   };
 
   // 時刻入力変更（履歴なし、変更開始時にスナップショット保存）
-  const handleTimeChange = (index: number, type: "start" | "end", value: string) => {
+  const handleTimeChange = (
+    index: number,
+    type: "start" | "end",
+    value: string,
+  ) => {
     beginChange();
     const newPairs = timePairs.map((pair, i) =>
-      i === index ? { ...pair, [type]: value } : pair
+      i === index ? { ...pair, [type]: value } : pair,
     );
     setStateWithoutHistory(newPairs);
   };
@@ -165,7 +149,7 @@ const TimeDurationCalculator: React.FC = () => {
   const handleSetCurrentTime = (index: number, type: "start" | "end") => {
     const { time, date } = getCurrentTimeInfo();
     const newPairs = timePairs.map((pair, i) =>
-      i === index ? { ...pair, [type]: time } : pair
+      i === index ? { ...pair, [type]: time } : pair,
     );
     setTimePairs(newPairs);
     updateLastRecordedDate(date);
@@ -194,7 +178,7 @@ const TimeDurationCalculator: React.FC = () => {
           setTimePairs(pairs.filter((_, idx) => idx !== i));
         } else {
           const newPairs = pairs.map((pair, idx) =>
-            idx === i ? { ...pair, end: "" } : pair
+            idx === i ? { ...pair, end: "" } : pair,
           );
           setTimePairs(newPairs);
         }
@@ -206,7 +190,7 @@ const TimeDurationCalculator: React.FC = () => {
           setTimePairs(pairs.filter((_, idx) => idx !== i));
         } else {
           const newPairs = pairs.map((pair, idx) =>
-            idx === i ? { ...pair, start: "" } : pair
+            idx === i ? { ...pair, start: "" } : pair,
           );
           setTimePairs(newPairs);
         }
@@ -219,7 +203,7 @@ const TimeDurationCalculator: React.FC = () => {
   // リセット（履歴に追加してundo可能）
   const handleReset = (): boolean => {
     const pairs = timePairsRef.current;
-    const hasAnyValue = pairs.some(pair => pair.start || pair.end);
+    const hasAnyValue = pairs.some((pair) => pair.start || pair.end);
     if (!hasAnyValue && lastRecordedDate === null) {
       return false;
     }
@@ -236,7 +220,7 @@ const TimeDurationCalculator: React.FC = () => {
     for (let i = 0; i < pairs.length; i++) {
       if (!pairs[i].start) {
         const newPairs = pairs.map((pair, idx) =>
-          idx === i ? { ...pair, start: time } : pair
+          idx === i ? { ...pair, start: time } : pair,
         );
         setTimePairs(newPairs);
         updateLastRecordedDate(date);
@@ -244,7 +228,7 @@ const TimeDurationCalculator: React.FC = () => {
       }
       if (!pairs[i].end) {
         const newPairs = pairs.map((pair, idx) =>
-          idx === i ? { ...pair, end: time } : pair
+          idx === i ? { ...pair, end: time } : pair,
         );
         setTimePairs(newPairs);
         updateLastRecordedDate(date);
@@ -276,7 +260,7 @@ const TimeDurationCalculator: React.FC = () => {
 
     // 何も入力がなければ最初のstartに現在時刻を入力してフォーカス
     const newPairs = pairs.map((pair, idx) =>
-      idx === 0 ? { ...pair, start: time } : pair
+      idx === 0 ? { ...pair, start: time } : pair,
     );
     setTimePairs(newPairs);
     updateLastRecordedDate(date);
@@ -329,7 +313,11 @@ const TimeDurationCalculator: React.FC = () => {
   };
 
   // クリップボードにコピー
-  const copyToClipboard = async (value: string, pairIndex: number, type: "start" | "end") => {
+  const copyToClipboard = async (
+    value: string,
+    pairIndex: number,
+    type: "start" | "end",
+  ) => {
     await copy(value);
     setCopiedField({ pairIndex, type });
     setTimeout(() => setCopiedField(null), 2000);
@@ -352,7 +340,9 @@ const TimeDurationCalculator: React.FC = () => {
 
   // コピーモーダルで選択（indexで検索して重複値に対応）
   const handleCopySelect = (index: number) => {
-    const option = copyOptions.find(opt => opt.index === index) as TimeOptionWithField | undefined;
+    const option = copyOptions.find((opt) => opt.index === index) as
+      | TimeOptionWithField
+      | undefined;
     if (option) {
       copyToClipboard(option.value, option.pairIndex, option.type);
     }
@@ -429,7 +419,10 @@ const TimeDurationCalculator: React.FC = () => {
       action: () => {
         // 入力にフォーカスがあればフォーカスを外す
         const activeElement = document.activeElement as HTMLElement;
-        if (activeElement?.tagName === "INPUT" || activeElement?.tagName === "TEXTAREA") {
+        if (
+          activeElement?.tagName === "INPUT" ||
+          activeElement?.tagName === "TEXTAREA"
+        ) {
           activeElement.blur();
         }
         setIsHelpModalOpen(false);
@@ -468,57 +461,16 @@ const TimeDurationCalculator: React.FC = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 py-8 px-4 transition-colors duration-300">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-10">
-          <div className="flex justify-end mb-4 gap-2">
-            <button
-              onClick={undo}
-              disabled={!canUndo}
-              className={`px-3 py-1 rounded-md text-sm transition-colors duration-200 ${
-                canUndo
-                  ? "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 cursor-pointer"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed"
-              }`}
-              aria-label={t.shortcuts.undo}
-              title={t.shortcuts.undo}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-              </svg>
-            </button>
-            <button
-              onClick={redo}
-              disabled={!canRedo}
-              className={`px-3 py-1 rounded-md text-sm transition-colors duration-200 ${
-                canRedo
-                  ? "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 cursor-pointer"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed"
-              }`}
-              aria-label={t.shortcuts.redo}
-              title={t.shortcuts.redo}
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
-              </svg>
-            </button>
-            <button
-              onClick={() => setIsHelpModalOpen(true)}
-              className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md text-sm transition-colors duration-200 cursor-pointer"
-              aria-label={t.shortcuts.showHelp}
-            >
-              ?
-            </button>
-            <button
-              onClick={toggleLanguage}
-              className="px-3 py-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md text-sm transition-colors duration-200 cursor-pointer"
-            >
-              {language === "ja" ? "🇺🇸 EN" : "🇯🇵 日本語"}
-            </button>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
-            {t.title}
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300">{t.subtitle}</p>
-        </div>
+        <TopControls
+          canUndo={canUndo}
+          canRedo={canRedo}
+          onUndo={undo}
+          onRedo={redo}
+          onOpenHelp={() => setIsHelpModalOpen(true)}
+          onToggleLanguage={toggleLanguage}
+          language={language}
+          t={t}
+        />
 
         {lastRecordedDate && (
           <div className="text-center mb-4">
@@ -530,79 +482,20 @@ const TimeDurationCalculator: React.FC = () => {
 
         <div className="space-y-3">
           {timePairs.map((pair, index) => (
-            <div
+            <TimePairRow
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 py-4 pl-4 pr-2 border border-gray-200 dark:border-gray-700"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-6 h-6 bg-blue-500 dark:bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold shrink-0">
-                  {index + 1}
-                </div>
-
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
-                  <div className="flex items-end gap-2">
-                    <div className="flex-1">
-                      <TimeInput
-                        ref={inputRefsRef.current[index]?.start}
-                        value={pair.start}
-                        onChange={(value) => handleTimeChange(index, "start", value)}
-                        onBlur={handleInputBlur}
-                        onArrowKeyChange={handleArrowKeyChange}
-                        label={t.startTime}
-                        copyText={t.copy}
-                        copiedText={t.copied}
-                        copyFailedText={t.copyFailed}
-                        externalCopyStatus={copiedField?.pairIndex === index && copiedField?.type === "start" ? t.copied : undefined}
-                      />
-                    </div>
-                    <button
-                      onClick={() => handleSetCurrentTime(index, "start")}
-                      aria-label={t.setCurrentStart}
-                      className="px-2 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded text-xs font-medium transition-colors duration-200 mb-5 cursor-pointer"
-                    >
-                      {t.setCurrentStart}
-                    </button>
-                  </div>
-
-                  <div className="flex items-end gap-2">
-                    <div className="flex-1">
-                      <TimeInput
-                        ref={inputRefsRef.current[index]?.end}
-                        value={pair.end}
-                        onChange={(value) => handleTimeChange(index, "end", value)}
-                        onBlur={handleInputBlur}
-                        onArrowKeyChange={handleArrowKeyChange}
-                        label={t.endTime}
-                        copyText={t.copy}
-                        copiedText={t.copied}
-                        copyFailedText={t.copyFailed}
-                        externalCopyStatus={copiedField?.pairIndex === index && copiedField?.type === "end" ? t.copied : undefined}
-                      />
-                    </div>
-                    <button
-                      onClick={() => handleSetCurrentTime(index, "end")}
-                      aria-label={t.setCurrentEnd}
-                      className="px-2 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded text-xs font-medium transition-colors duration-200 mb-5 cursor-pointer"
-                    >
-                      {t.setCurrentEnd}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="w-8">
-                  {timePairs.length > 1 && (
-                    <button
-                      onClick={() => handleDeleteTimePair(index)}
-                      aria-label={t.delete}
-                      className="tooltip text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded shrink-0 cursor-pointer"
-                      data-tooltip={t.delete}
-                    >
-                      🗑️
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
+              index={index}
+              pair={pair}
+              totalPairs={timePairs.length}
+              inputRefs={inputRefsRef.current[index]}
+              onTimeChange={handleTimeChange}
+              onInputBlur={handleInputBlur}
+              onArrowKeyChange={handleArrowKeyChange}
+              onSetCurrentTime={handleSetCurrentTime}
+              onDeleteTimePair={handleDeleteTimePair}
+              copiedField={copiedField}
+              t={t}
+            />
           ))}
         </div>
 
@@ -623,39 +516,14 @@ const TimeDurationCalculator: React.FC = () => {
           </button>
         </div>
 
-        <div className="mt-8 text-center">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 inline-block">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
-              {t.totalDuration}
-            </h2>
-            <div
-              onClick={handleTotalCopy}
-              className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg p-2 transition-colors duration-200"
-            >
-              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                {totalDuration.toFixed(3)} {t.hours}
-              </p>
-            </div>
-            <div className="h-4 flex items-center justify-center mt-2">
-              {totalCopyStatus && (
-                <div className="text-xs text-green-600 dark:text-green-400">
-                  {totalCopyStatus}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <TotalDurationCard
+          totalDuration={totalDuration}
+          totalCopyStatus={totalCopyStatus}
+          onCopy={handleTotalCopy}
+          t={t}
+        />
 
-        <footer className="mt-16 text-center">
-          <a
-            href="https://github.com/y-temp4/worktime-calc"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors duration-200"
-          >
-            GitHub
-          </a>
-        </footer>
+        <AppFooter />
       </div>
 
       <ShortcutToast activeKeys={activeKeys} />
@@ -679,5 +547,3 @@ const TimeDurationCalculator: React.FC = () => {
     </div>
   );
 };
-
-export default TimeDurationCalculator;
