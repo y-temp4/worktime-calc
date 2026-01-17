@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { navigate, usePathname } from "../router";
 import { Language, translations } from "../i18n/translations";
 
 export const useLanguage = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
   
   // Determine language from URL path
   const getLanguageFromPath = (pathname: string): Language => {
@@ -14,17 +13,17 @@ export const useLanguage = () => {
     return "ja";
   };
 
-  const [language, setLanguage] = useState<Language>(() => 
-    getLanguageFromPath(location.pathname)
+  const [language, setLanguage] = useState<Language>(() =>
+    getLanguageFromPath(pathname)
   );
 
   const t = translations[language];
 
   // Update language when route changes
   useEffect(() => {
-    const newLanguage = getLanguageFromPath(location.pathname);
+    const newLanguage = getLanguageFromPath(pathname);
     setLanguage(newLanguage);
-  }, [location.pathname]);
+  }, [pathname]);
 
   // Update meta tags when language changes
   useEffect(() => {
