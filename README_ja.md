@@ -4,7 +4,7 @@
 
 ![OGP](./public/ogp_ja.png)
 
-[![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![Preact](https://img.shields.io/badge/Preact-10.25.1-673AB8?logo=preact&logoColor=white)](https://preactjs.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
@@ -24,7 +24,7 @@
 
 ## 技術スタック
 
-- **フロントエンド**: React 19 + TypeScript
+- **フロントエンド**: Preact（React互換） + TypeScript
 - **ビルドツール**: Vite
 - **スタイリング**: Tailwind CSS
 - **ルーティング**: History API の軽量ルーティング
@@ -60,7 +60,7 @@ pnpm preview
 
 このプロジェクトでは以下の技術を使用しています：
 
-- 型安全性のためのReact + TypeScript
+- 型安全性のためのPreact（React互換） + TypeScript
 - 高速な開発とビルドのためのVite
 - ユーティリティファーストなスタイリングのためのTailwind CSS
 - 言語切替のための軽量 History API ルーティング

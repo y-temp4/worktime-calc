@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import preact from "@preact/preset-vite";
 import tailwindcss from "@tailwindcss/vite";
 import { translations } from "./src/i18n/translations";
 
@@ -152,6 +152,6 @@ const generateSsg = () => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), generateSsg()],
+  plugins: [preact(), tailwindcss(), generateSsg()],
   base: "/worktime-calc/",
 });

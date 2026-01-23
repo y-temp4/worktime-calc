@@ -4,7 +4,7 @@
 
 ![OGP](./public/ogp_en.png)
 
-[![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![Preact](https://img.shields.io/badge/Preact-10.25.1-673AB8?logo=preact&logoColor=white)](https://preactjs.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.18-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
@@ -24,7 +24,7 @@ This is a web application to calculate work time with multilingual support (Engl
 
 ## Tech Stack
 
-- **Frontend**: React 19 with TypeScript
+- **Frontend**: Preact (React-compatible) with TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
 - **Routing**: Lightweight History API routing
@@ -60,7 +60,7 @@ pnpm preview
 
 This project uses:
 
-- React with TypeScript for type safety
+- Preact (React-compatible) with TypeScript for type safety
 - Vite for fast development and building
 - Tailwind CSS for utility-first styling
 - Lightweight History API routing for language paths
